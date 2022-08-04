@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Supers
-from .serializers import SuperSerializer
+from .serializers import SupersSerializer
 
 # Create your views here.
 # As a developer, I want to create a GET by id endpoint that does the following things:
@@ -28,15 +28,15 @@ def supers_list(request):
         supers = Supers.objects.all()
 
     if supers_list_param:
-        supers = supers.filter(supers_list__type=supers_list_param)
+        supers = supers.filter(supers_list__name=supers_list_param)
 
     elif request.method == "POST":
-        serializer = SuperSerializer(data = request.data)
+        serializer = SupersSerializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
         return Response(serializer.data, status = status.HTTP_201_CREATED)
 
-    serializer = SuperSerializer(supers, many=True)
+    serializer = SupersSerializer(supers, many=True)
 
     return Response(serializer.data)
 
@@ -54,12 +54,12 @@ def supers_list(request):
 
 @api_view (['GET', 'PUT', 'DELETE'])
 def supers_detail(request, pk):
-    supers = get_list_or_404(Supers, pk = pk)
+    supers = get_object_or_404(Supers, pk = pk)
     if request.method == 'GET':
-        serializer = SuperSerializer(supers);
+        serializer = SupersSerializer(supers);
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = SuperSerializer(supers, data = request.data)
+        serializer = SupersSerializer(supers, data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
         return Response(serializer.data)
