@@ -13,10 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+# As a developer, I want to register the SuperType model with the admin site so I can:
+# Register a new super user (python manage.py createsuperuser)
+# Visit the admin site
+# Seed two values (“Hero” and “Villain”) into the “super_type” table
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), #admin #PW: Password
     path('api/supers/', include('supers.urls')),
 ]
