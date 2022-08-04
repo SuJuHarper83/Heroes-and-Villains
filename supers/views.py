@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Supers
+from super_types.models import SuperType
 from .serializers import SupersSerializer
 
 # Create your views here.
@@ -66,3 +67,22 @@ def supers_detail(request, pk):
     elif request.method == 'DELETE':
         supers.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
+
+@api_view (['GET'])
+def super_type_list(request):
+
+    super_type = SuperType.objects.all()
+
+    custom_response_dictionary = {}
+
+    for super_type in SuperType:
+        supers = Supers.objects.filter(super_type_id = super_type.id)
+
+        supers_serializer = SupersSerializer(supers, many=True)
+
+        custom_response_dictionary[super_type.type] = {
+            "type": super_type.type,
+            "supers": supers_serializer.data
+        }
+
+    return Response(custom_response_dictionary)

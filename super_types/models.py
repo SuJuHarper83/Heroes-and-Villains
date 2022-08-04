@@ -5,6 +5,6 @@ from django.db import models
 # Property names must be in snake_case and match the following exactly!
 # type – CharField
 
-class SuperTypes(models.Model):
+class SuperType(models.Model):
     type = models.CharField(max_length=225)
     
