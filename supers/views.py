@@ -29,7 +29,7 @@ def supers_list(request):
         supers = Supers.objects.all()
 
     if supers_list_param:
-        supers = supers.filter(supers_list__name=supers_list_param)
+        supers = supers.filter(supers_list__name = supers_list_param)
 
     elif request.method == "POST":
         serializer = SupersSerializer(data = request.data)
@@ -68,21 +68,3 @@ def supers_detail(request, pk):
         supers.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
 
-@api_view (['GET'])
-def super_type_list(request):
-
-    super_type = SuperType.objects.all()
-
-    custom_response_dictionary = {}
-
-    for super_type in SuperType:
-        supers = Supers.objects.filter(super_type_id = super_type.id)
-
-        supers_serializer = SupersSerializer(supers, many=True)
-
-        custom_response_dictionary[super_type.type] = {
-            "type": super_type.type,
-            "supers": supers_serializer.data
-        }
-
-    return Response(custom_response_dictionary)
