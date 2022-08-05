@@ -23,7 +23,7 @@ from .serializers import SupersSerializer
 def supers_list(request):
     supers_list_param = request.query_params.get('supers_list')
     
-    if request.method == "GET":
+    if request.method == "GET": #200 OK
         
         print(supers_list_param)
 
@@ -32,7 +32,7 @@ def supers_list(request):
     if supers_list_param:
         supers = supers.filter(supers_list__name = supers_list_param)
 
-    elif request.method == "POST":
+    elif request.method == "POST": #201 Created
         serializer = SupersSerializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
@@ -57,15 +57,15 @@ def supers_list(request):
 @api_view (['GET', 'PUT', 'DELETE'])
 def supers_detail(request, pk):
     supers = get_object_or_404(Supers, pk = pk)
-    if request.method == 'GET':
+    if request.method == 'GET': #200 OK
         serializer = SupersSerializer(supers);
         return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'PUT':
+    elif request.method == 'PUT': #200 OK
         serializer = SupersSerializer(supers, data = request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'DELETE':
+    elif request.method == 'DELETE': #204 No Content
         supers.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
 
